@@ -1,0 +1,1 @@
+export let defaultCostDay = 8000

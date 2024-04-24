@@ -1,6 +1,6 @@
 export type ICustomSelectField = {
   idProps: string,
   labelProps: string,
-  valueOneProps: number | string,
-  valueTwoProps: number | string
+  oneValueProps: number | string,
+  twoValueProps: number | string
 }

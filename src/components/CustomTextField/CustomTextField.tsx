@@ -1,15 +1,12 @@
-import React from 'react'
 import { Box, FormControl, TextField } from '@mui/material'
 
 import { ICustomTextField } from './ICustomTextField'
 
+import { BoxStyle } from '../../mui-styles/Box.style'
+
 export const CustomTextField = ({ idProps, labelProps, helperProps, defaultValueProps }: ICustomTextField) => {
   return (
-    <Box sx={{
-      width: 330, marginTop: 4, marginBottom: 4, '@media (max-width: 420px)': {
-        width: '100%',
-      }
-    }}>
+    <Box sx={BoxStyle}>
       <FormControl fullWidth>
         <TextField
           required

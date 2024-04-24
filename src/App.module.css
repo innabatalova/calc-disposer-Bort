@@ -1,0 +1,21 @@
+.App {
+  max-width: 1440px;
+  padding: 30px;
+  margin: auto;
+}
+
+.Wrapper{
+  display: flex;
+  justify-content: space-between;
+}
+
+.Data {
+  display: flex;
+  width: 58%;
+  flex-wrap: wrap;
+  column-gap: 20px;
+}
+
+.Coster{
+  width: 40%;
+}

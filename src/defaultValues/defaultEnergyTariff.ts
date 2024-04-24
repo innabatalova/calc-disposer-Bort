@@ -1,0 +1,1 @@
+export let defaultEnergyTariff = 10

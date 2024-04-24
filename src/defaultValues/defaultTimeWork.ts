@@ -1,0 +1,1 @@
+export let defaultTimeWork = 5
