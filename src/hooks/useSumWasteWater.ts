@@ -1,4 +1,4 @@
-export const useSumWasteWater = (users: number, days: number, water: number) => {
+export const useSumWasteWater = (users: number, days: number, water: number): number => {
   const costkB = 1000
   const costLiterOnUser = 3
 
