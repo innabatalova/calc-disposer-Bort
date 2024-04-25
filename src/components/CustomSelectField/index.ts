@@ -1,1 +1,1 @@
-export { default } from './CustomSelectField'
+export { CustomSelectField } from './CustomSelectField'

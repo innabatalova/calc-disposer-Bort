@@ -11,6 +11,7 @@
 
 .Data {
   display: flex;
+  justify-content: space-around;
   width: 58%;
   flex-wrap: wrap;
   column-gap: 20px;

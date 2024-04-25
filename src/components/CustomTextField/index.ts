@@ -1,1 +1,1 @@
-export { default } from './CustomTextField'
+export { CustomTextField } from './CustomTextField'

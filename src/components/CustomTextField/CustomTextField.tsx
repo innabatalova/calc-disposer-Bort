@@ -1,8 +1,8 @@
 import { useContext, useState } from 'react'
-import { Box, FormControl, TextField, Typography } from '@mui/material'
+import { Box, FormControl, TextField } from '@mui/material'
 
 import { ICustomTextField } from './ICustomTextField'
-import { iContext } from '../../context/iContext'
+import { IContext } from '../../context/IContext'
 
 import { BoxStyle } from './mui-styles/Box.style'
 
@@ -10,7 +10,7 @@ import Context from '../../context/context'
 
 export const CustomTextField = ({ idProps, labelProps, helperProps, defaultValueProps }: ICustomTextField) => {
   const defoultContext = useContext(Context)
-  const [context] = useState<iContext>(defoultContext)
+  const [context] = useState<IContext>(defoultContext)
 
   const [valid, setValid] = useState<boolean>(true)
 
@@ -41,5 +41,3 @@ export const CustomTextField = ({ idProps, labelProps, helperProps, defaultValue
     </Context.Provider>
   )
 }
-
-export default CustomTextField

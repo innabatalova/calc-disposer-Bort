@@ -7,7 +7,7 @@ import { CardDisposerStyle } from './mui-styles/CardDisposer.style'
 import { BoxDisposerStyle } from './mui-styles/BoxDisposer.style'
 
 
-const CustomSelectField = () => {
+export const CustomSelectField = () => {
   const [valueDisposer, setValueDisposer] = useState(ultimate1500)
 
   const changeValueDisposer = (e: any) => {
@@ -60,5 +60,3 @@ const CustomSelectField = () => {
     </Card>
   )
 }
-
-export default CustomSelectField

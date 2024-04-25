@@ -1,6 +1,6 @@
 import { createContext } from 'react'
 
-import { iContext } from './iContext'
+import { IContext } from './IContext'
 
 const valuesField = {
   'energyTariff': null,
@@ -15,6 +15,6 @@ const valuesField = {
   'amountDays': null
 }
 
-const Context = createContext<iContext>(valuesField)
+const Context = createContext<IContext>(valuesField)
 
 export default Context

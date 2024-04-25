@@ -1,45 +1,46 @@
 import { useState, useContext, useEffect } from 'react'
 import { Card, Typography } from '@mui/material'
 
-import CustomTextField from './components/CustomTextField'
-import CustomSelectField from './components/CustomSelectField/CustomSelectField'
-import CostButton from './components/CostButton'
+import { CustomTextField } from './components/CustomTextField'
+import { CustomSelectField } from './components/CustomSelectField/CustomSelectField'
+import { CostButton } from './components/CostButton'
 
 import styles from './App.module.css'
 import { CardStyle } from './mui-styles/Card.style'
 import { TypographyTextStyle } from './mui-styles/TypographyText.style'
 
-import { defaultEnergyTariff } from './defaultValues/defaultEnergyTariff'
-import { defaultWaterTariff } from './defaultValues/defaultWaterTariff'
-import { defaultAmountDays } from './defaultValues/defaultAmountDays'
-import { defaultDayCost } from './defaultValues/defaultDayCost'
-import { defaultTimeWork } from './defaultValues/defaultTimeWork'
-import { defaultUserOnDay } from './defaultValues/defaultUserOnDay'
-import { defaultPartBioGarbage } from './defaultValues/defaultPartBioGarbage'
-
-import { useTotalWasteRemovalCosts } from './hooks/useTotalWasteRemovalCosts'
-import { useSumWasteEnergy } from './hooks/useSumWasteEnergy'
-import { useSumWasteWater } from './hooks/useSumWasteWater'
+import {
+  defaultEnergyTariff,
+  defaultWaterTariff,
+  defaultAmountDays,
+  defaultDayCost,
+  defaultTimeWork,
+  defaultUserOnDay,
+  defaultPartBioGarbage
+} from "./defaultValues"
 
 import { ultimate1500 } from './db'
 
 import Context from './context/context'
 
-import { iContext } from './context/iContext'
+import { IContext } from './context/IContext'
+
+import { totalWasteRemovalCosts } from './core'
+import { totalWasteEnergy } from './core'
+import { totalWasteWater } from './core'
+import { recalculationExpenses } from './core'
+import { costSaving } from './core'
+import { paybackTime } from './core'
 
 const App = () => {
   const defoultContext = useContext(Context)
-  const [context] = useState<iContext>(defoultContext)
+  const [context] = useState<IContext>(defoultContext)
 
-  const totalWasteRemovalCosts = useTotalWasteRemovalCosts(defaultAmountDays, defaultDayCost)
-  const sumWasteEnergy = useSumWasteEnergy(Number(ultimate1500.power), defaultEnergyTariff, defaultTimeWork, defaultAmountDays)
-  const sumWasteWater = useSumWasteWater(defaultUserOnDay, defaultAmountDays, defaultWaterTariff)
-
-  useEffect(()=>{
+  useEffect(() => {
     context.energyTariff = defaultEnergyTariff
     context.waterTariff = defaultWaterTariff
     context.dayCost = defaultDayCost
-    context.totalCost = totalWasteRemovalCosts
+    context.totalCost = sumWasteRemovalCosts
     context.timeWork = defaultTimeWork
     context.wasteEnergy = sumWasteEnergy
     context.wasteWater = sumWasteWater
@@ -48,14 +49,26 @@ const App = () => {
     context.amountDays = defaultAmountDays
   }, [])
 
+  const sumWasteRemovalCosts = totalWasteRemovalCosts(defaultAmountDays, defaultDayCost)
+  const sumWasteEnergy = totalWasteEnergy(Number(ultimate1500.power), defaultEnergyTariff, defaultTimeWork, defaultAmountDays)
+  const sumWasteWater = totalWasteWater(defaultUserOnDay, defaultAmountDays, defaultWaterTariff)
+
   const costTotal = (e: any) => {
     e.preventDefault()
+
+    const wasteRemovalCostsResult = totalWasteRemovalCosts(context.amountDays, context.dayCost)
+    const recalResult = recalculationExpenses(wasteRemovalCostsResult, context.partBioGarbage)
+    console.log('выгода от использования измельчителя: ' + recalResult)
+
+    const wasteEnergyResult = totalWasteEnergy(Number(ultimate1500.power), context.energyTariff, context.timeWork, context.amountDays)
+    const wasteWaterResult = totalWasteWater(context.userOnDay, context.amountDays, context.waterTariff)
+    const savingResult = costSaving(recalResult, wasteEnergyResult, wasteWaterResult)
+    console.log('экономия в месяц: ' + savingResult)
+
+    const paybackResult = paybackTime(Number(ultimate1500.price), savingResult)
+    console.log('окупаемость: ' + paybackResult + ' дней')
+
     console.log(context)
-
-    // e.currentTarget.querySelectorAll('input').forEach(function (field: any) {
-    //   console.log(field.name + "=" + field.value);
-    // });
-
   }
 
 
@@ -91,7 +104,7 @@ const App = () => {
               </Typography>
               <div className={styles.Items}>
                 <CustomTextField idProps='dayCost' labelProps='Затраты на вывоз мусора в день' helperProps='Затраты за один день работы, руб' defaultValueProps={defaultDayCost} />
-                <CustomTextField idProps='totalCost' labelProps='Общие затраты на вывоз мусора' helperProps='Сумма текущих затрат на вывоз мусора, руб' defaultValueProps={totalWasteRemovalCosts} />
+                <CustomTextField idProps='totalCost' labelProps='Общие затраты на вывоз мусора' helperProps='Сумма текущих затрат на вывоз мусора, руб' defaultValueProps={sumWasteRemovalCosts} />
               </div>
             </Card>
 

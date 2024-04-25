@@ -1,3 +1,3 @@
-export type iContext = {
-  [index: string]: number | null
+export type IContext = {
+  [index: string]: number | null | undefined
 }
