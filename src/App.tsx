@@ -47,25 +47,28 @@ const App = () => {
     context.userOnDay = defaultUserOnDay
     context.partBioGarbage = defaultPartBioGarbage
     context.amountDays = defaultAmountDays
+    context.modelPower = ultimate1500.power
+    context.modelPrice = ultimate1500.price
   }, [])
 
   const sumWasteRemovalCosts = totalWasteRemovalCosts(defaultAmountDays, defaultDayCost)
-  const sumWasteEnergy = totalWasteEnergy(Number(ultimate1500.power), defaultEnergyTariff, defaultTimeWork, defaultAmountDays)
+  const sumWasteEnergy = totalWasteEnergy(ultimate1500.power, defaultEnergyTariff, defaultTimeWork, defaultAmountDays)
   const sumWasteWater = totalWasteWater(defaultUserOnDay, defaultAmountDays, defaultWaterTariff)
+  console.log(sumWasteEnergy);
 
-  const costTotal = (e: any) => {
+  const costTotal = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
 
     const wasteRemovalCostsResult = totalWasteRemovalCosts(context.amountDays, context.dayCost)
     const recalResult = recalculationExpenses(wasteRemovalCostsResult, context.partBioGarbage)
     console.log('выгода от использования измельчителя: ' + recalResult)
 
-    const wasteEnergyResult = totalWasteEnergy(Number(ultimate1500.power), context.energyTariff, context.timeWork, context.amountDays)
+    const wasteEnergyResult = totalWasteEnergy(context.modelPower, context.energyTariff, context.timeWork, context.amountDays)
     const wasteWaterResult = totalWasteWater(context.userOnDay, context.amountDays, context.waterTariff)
     const savingResult = costSaving(recalResult, wasteEnergyResult, wasteWaterResult)
-    console.log('экономия в месяц: ' + savingResult)
+    console.log('экономия за указанный период: ' + savingResult)
 
-    const paybackResult = paybackTime(Number(ultimate1500.price), savingResult)
+    const paybackResult = paybackTime(context.modelPrice, savingResult, context.amountDays)
     console.log('окупаемость: ' + paybackResult + ' дней')
 
     console.log(context)
@@ -100,11 +103,11 @@ const App = () => {
 
             <Card sx={CardStyle}>
               <Typography variant="h5">
-                Затраты на вывоз мусора
+                Работа ресторана
               </Typography>
               <div className={styles.Items}>
-                <CustomTextField idProps='dayCost' labelProps='Затраты на вывоз мусора в день' helperProps='Затраты за один день работы, руб' defaultValueProps={defaultDayCost} />
-                <CustomTextField idProps='totalCost' labelProps='Общие затраты на вывоз мусора' helperProps='Сумма текущих затрат на вывоз мусора, руб' defaultValueProps={sumWasteRemovalCosts} />
+                <CustomTextField idProps='userOnDay' labelProps='Количество клиентов в день' helperProps='Среднее значение по Москве, чел' defaultValueProps={defaultUserOnDay} />
+                <CustomTextField idProps='partBioGarbage' labelProps='Доля биомусора' helperProps='Относительно общего кол-ва мусора, %' defaultValueProps={defaultPartBioGarbage} />
               </div>
             </Card>
 
@@ -121,14 +124,15 @@ const App = () => {
 
             <Card sx={CardStyle}>
               <Typography variant="h5">
-                Работа ресторана
+                Затраты на вывоз мусора
               </Typography>
               <div className={styles.Items}>
-                <CustomTextField idProps='userOnDay' labelProps='Количество клиентов в день' helperProps='Среднее значение по Москве, чел' defaultValueProps={defaultUserOnDay} />
-                <CustomTextField idProps='partBioGarbage' labelProps='Доля биомусора' helperProps='Относительно общего кол-ва мусора, %' defaultValueProps={defaultPartBioGarbage} />
+                <CustomTextField idProps='dayCost' labelProps='Затраты на вывоз мусора в день' helperProps='Затраты за один день работы, руб' defaultValueProps={defaultDayCost} />
                 <CustomTextField idProps='amountDays' labelProps='Календарные дни' helperProps='Период работы, дни' defaultValueProps={defaultAmountDays} />
+                <CustomTextField idProps='totalCost' labelProps='Общие затраты на вывоз мусора' helperProps='Сумма текущих затрат на вывоз мусора, руб' defaultValueProps={context.totalCost === null ? sumWasteRemovalCosts : context.totalCost} />
               </div>
             </Card>
+            
           </div>
           <div className={styles.Coster}>
             <CustomSelectField />

@@ -12,7 +12,9 @@ const valuesField = {
   'wasteWater': null,
   'userOnDay': null,
   'partBioGarbage': null,
-  'amountDays': null
+  'amountDays': null,
+  'modelPower': null,
+  'modelPrice': null
 }
 
 const Context = createContext<IContext>(valuesField)
