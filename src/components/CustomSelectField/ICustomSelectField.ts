@@ -1,6 +1,8 @@
 export type ICustomSelectField = {
   idProps: string,
   labelProps: string,
-  oneValueProps: number | string,
-  twoValueProps: number | string
+  valueDisposerProps: number | string,
+  changeValueDisposerProps: (e: any) => void
 }
+
+export type IStateSelectField = string | number

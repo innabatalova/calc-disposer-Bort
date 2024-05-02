@@ -1,25 +1,14 @@
-import { useState, useContext, useEffect } from 'react'
+import { useState, useContext } from 'react'
 import { Card, Typography } from '@mui/material'
 
+import { CustomBlockSelect } from './blocks/CustomBlockSelect/CustomBlockSelect'
 import { CustomTextField } from './components/CustomTextField'
-import { CustomSelectField } from './components/CustomSelectField/CustomSelectField'
 import { CostButton } from './components/CostButton'
+import { CustomBlockResult } from './blocks/CustomBlockResult'
 
 import styles from './App.module.css'
 import { CardStyle } from './mui-styles/Card.style'
 import { TypographyTextStyle } from './mui-styles/TypographyText.style'
-
-import {
-  defaultEnergyTariff,
-  defaultWaterTariff,
-  defaultAmountDays,
-  defaultDayCost,
-  defaultTimeWork,
-  defaultUserOnDay,
-  defaultPartBioGarbage
-} from "./defaultValues"
-
-import { ultimate1500 } from './db'
 
 import Context from './context/context'
 
@@ -34,44 +23,40 @@ import { paybackTime } from './core'
 
 const App = () => {
   const defoultContext = useContext(Context)
-  const [context] = useState<IContext>(defoultContext)
+  const [context, setContext] = useState<IContext>(defoultContext)
+  console.log(context);
 
-  useEffect(() => {
-    context.energyTariff = defaultEnergyTariff
-    context.waterTariff = defaultWaterTariff
-    context.dayCost = defaultDayCost
-    context.totalCost = sumWasteRemovalCosts
-    context.timeWork = defaultTimeWork
-    context.wasteEnergy = sumWasteEnergy
-    context.wasteWater = sumWasteWater
-    context.userOnDay = defaultUserOnDay
-    context.partBioGarbage = defaultPartBioGarbage
-    context.amountDays = defaultAmountDays
-    context.modelPower = ultimate1500.power
-    context.modelPrice = ultimate1500.price
-  }, [])
-
-  const sumWasteRemovalCosts = totalWasteRemovalCosts(defaultAmountDays, defaultDayCost)
-  const sumWasteEnergy = totalWasteEnergy(ultimate1500.power, defaultEnergyTariff, defaultTimeWork, defaultAmountDays)
-  const sumWasteWater = totalWasteWater(defaultUserOnDay, defaultAmountDays, defaultWaterTariff)
-  console.log(sumWasteEnergy);
 
   const costTotal = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
 
     const wasteRemovalCostsResult = totalWasteRemovalCosts(context.amountDays, context.dayCost)
     const recalResult = recalculationExpenses(wasteRemovalCostsResult, context.partBioGarbage)
-    console.log('выгода от использования измельчителя: ' + recalResult)
 
     const wasteEnergyResult = totalWasteEnergy(context.modelPower, context.energyTariff, context.timeWork, context.amountDays)
     const wasteWaterResult = totalWasteWater(context.userOnDay, context.amountDays, context.waterTariff)
     const savingResult = costSaving(recalResult, wasteEnergyResult, wasteWaterResult)
-    console.log('экономия за указанный период: ' + savingResult)
 
     const paybackResult = paybackTime(context.modelPrice, savingResult, context.amountDays)
-    console.log('окупаемость: ' + paybackResult + ' дней')
 
-    console.log(context)
+    const newContext = {
+      'energyTariff': context.energyTariff,
+      'waterTariff': context.waterTariff,
+      'dayCost': context.dayCost,
+      'timeWork': context.timeWork,
+      'wasteEnergy': context.wasteEnergy,
+      'wasteWater': context.wasteWater,
+      'userOnDay': context.userOnDay,
+      'partBioGarbage': context.partBioGarbage,
+      'amountDays': context.amountDays,
+      'modelPower': context.modelPower,
+      'modelPrice': context.modelPrice,
+      'totalCost': wasteRemovalCostsResult,
+      'recalResult': recalResult,
+      'savingResult': savingResult,
+      'paybackResult': paybackResult
+    }
+    setContext(newContext)
   }
 
 
@@ -94,51 +79,57 @@ const App = () => {
 
           <div className={styles.Data}>
             <Card sx={CardStyle}>
-              <Typography variant="h5">
-                Тарифы
-              </Typography>
-              <CustomTextField idProps='energyTariff' labelProps='Тариф электроэнергии' helperProps='Стоимость 1кВт/час, руб' defaultValueProps={defaultEnergyTariff} />
-              <CustomTextField idProps='waterTariff' labelProps='Тариф холодной воды' helperProps='Стоимость 1м3, руб' defaultValueProps={defaultWaterTariff} />
-            </Card>
-
-            <Card sx={CardStyle}>
-              <Typography variant="h5">
+              <Typography variant="h6">
                 Работа ресторана
               </Typography>
               <div className={styles.Items}>
-                <CustomTextField idProps='userOnDay' labelProps='Количество клиентов в день' helperProps='Среднее значение по Москве, чел' defaultValueProps={defaultUserOnDay} />
-                <CustomTextField idProps='partBioGarbage' labelProps='Доля биомусора' helperProps='Относительно общего кол-ва мусора, %' defaultValueProps={defaultPartBioGarbage} />
+                <CustomTextField idProps='userOnDay' labelProps='Количество клиентов в день' helperProps='Среднее значение по Москве, чел' defaultValueProps={context.userOnDay} />
+                <CustomTextField idProps='partBioGarbage' labelProps='Доля биомусора' helperProps='Относительно общего кол-ва мусора, %' defaultValueProps={context.partBioGarbage} />
               </div>
             </Card>
 
             <Card sx={CardStyle}>
-              <Typography variant="h5">
-                Расход измельчителя
-              </Typography>
-              <div className={styles.Items}>
-                <CustomTextField idProps='timeWork' labelProps='Время работы измельчителя' helperProps='В сутки, час' defaultValueProps={defaultTimeWork} />
-                <CustomTextField idProps='wasteEnergy' labelProps='Расход электроэнергии' helperProps='Дополнительный расход на оплату электроэнергии при работе измельчителя, руб' defaultValueProps={sumWasteEnergy} />
-                <CustomTextField idProps='wasteWater' labelProps='Расход воды' helperProps='Дополнительный расход на оплату воды при работе измельчителя, руб' defaultValueProps={sumWasteWater} />
-              </div>
-            </Card>
-
-            <Card sx={CardStyle}>
-              <Typography variant="h5">
+              <Typography variant="h6">
                 Затраты на вывоз мусора
               </Typography>
               <div className={styles.Items}>
-                <CustomTextField idProps='dayCost' labelProps='Затраты на вывоз мусора в день' helperProps='Затраты за один день работы, руб' defaultValueProps={defaultDayCost} />
-                <CustomTextField idProps='amountDays' labelProps='Календарные дни' helperProps='Период работы, дни' defaultValueProps={defaultAmountDays} />
-                <CustomTextField idProps='totalCost' labelProps='Общие затраты на вывоз мусора' helperProps='Сумма текущих затрат на вывоз мусора, руб' defaultValueProps={context.totalCost === null ? sumWasteRemovalCosts : context.totalCost} />
+                <CustomTextField idProps='dayCost' labelProps='Затраты на вывоз мусора в день' helperProps='Затраты за один день работы, руб' defaultValueProps={context.dayCost} />
+                <CustomTextField idProps='amountDays' labelProps='Календарные дни' helperProps='Период работы, дни' defaultValueProps={context.amountDays} />
               </div>
             </Card>
-            
+
+            <Card sx={CardStyle}>
+              <Typography variant="h6">
+                Тарифы
+              </Typography>
+              <CustomTextField idProps='energyTariff' labelProps='Тариф электроэнергии' helperProps='Стоимость 1кВт/час, руб' defaultValueProps={context.energyTariff} />
+              <CustomTextField idProps='waterTariff' labelProps='Тариф холодной воды' helperProps='Стоимость 1м3, руб' defaultValueProps={context.waterTariff} />
+            </Card>
+
+            <Card sx={CardStyle}>
+              <Typography variant="h6">
+                Расход измельчителя
+              </Typography>
+              <div className={styles.Items}>
+                <CustomTextField idProps='timeWork' labelProps='Время работы измельчителя' helperProps='В сутки, час' defaultValueProps={context.timeWork} />
+                <CustomTextField idProps='wasteEnergy' labelProps='Расход электроэнергии' helperProps='Дополнительный расход на оплату электроэнергии при работе измельчителя, руб' defaultValueProps={context.wasteEnergy} />
+                <CustomTextField idProps='wasteWater' labelProps='Расход воды' helperProps='Дополнительный расход на оплату воды при работе измельчителя, руб' defaultValueProps={context.wasteWater} />
+              </div>
+            </Card>
           </div>
-          <div className={styles.Coster}>
-            <CustomSelectField />
-            <CostButton />
+
+          <div className={styles.CostWrapper}>
+
+            <div className={styles.Coster}>
+              <CustomBlockSelect />
+              <CostButton />
+            </div>
+            <CustomBlockResult />
+
           </div>
+
         </form>
+
       </div >
     </Context.Provider>
   )

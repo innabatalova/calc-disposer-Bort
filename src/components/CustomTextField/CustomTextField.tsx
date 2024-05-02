@@ -8,9 +8,8 @@ import { BoxStyle } from './mui-styles/Box.style'
 
 import Context from '../../context/context'
 
-export const CustomTextField = ({ idProps, labelProps, helperProps, defaultValueProps }: ICustomTextField) => {
-  const defoultContext = useContext(Context)
-  const [context] = useState<IContext>(defoultContext)
+export const CustomTextField = ({ idProps, labelProps, helperProps, valueProps, defaultValueProps, variantProps, disabledProps }: ICustomTextField) => {
+  const context = useContext<IContext>(Context)
 
   const [valid, setValid] = useState<boolean>(true)
 
@@ -33,8 +32,11 @@ export const CustomTextField = ({ idProps, labelProps, helperProps, defaultValue
             error={!valid ? true : false}
             id={idProps}
             label={labelProps}
+            value={valueProps}
             defaultValue={defaultValueProps}
             helperText={valid ? helperProps : 'Укажите данные в числовом формате'}
+            variant={variantProps}
+            disabled={disabledProps}
           />
         </FormControl>
       </Box>

@@ -1,5 +1,5 @@
 export const BoxStyle = {
-  width: 330,
+  width: '100%',
   marginTop: 4,
   marginBottom: 4,
   '@media (max-width: 420px)': {
