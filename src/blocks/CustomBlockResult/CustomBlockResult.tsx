@@ -20,6 +20,14 @@ export const CustomBlockResult = () => {
           Итого:
         </Typography>
         <div className={styles.Items}>
+          <CustomTextField idProps='wasteEnergy' labelProps='Расход электроэнергии'
+            helperProps='Доп.расход на оплату электроэнергии при работе измельчителя, руб' variantProps='filled'
+            disabledProps={true} valueProps={context.wasteEnergy} />
+
+          <CustomTextField idProps='wasteWater' labelProps='Расход воды'
+            helperProps='Доп.расход на оплату воды при работе измельчителя, руб' variantProps='filled'
+            disabledProps={true} valueProps={context.wasteWater} />
+
           <CustomTextField idProps='totalCost' labelProps='Общие затраты на вывоз мусора'
             helperProps='Сумма текущих затрат на вывоз мусора, руб' variantProps='filled'
             disabledProps={true} valueProps={context.totalCost} />

@@ -1,6 +1,6 @@
 export const CardDisposerStyle = {
   width: 'auto',
-  padding: 4,
+  padding: 2,
   '@media (max-width: 420px)': {
     width: '100%',
   }

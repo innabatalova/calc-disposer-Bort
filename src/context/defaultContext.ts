@@ -12,21 +12,13 @@ import {
 
 import { ultimate1500 } from '../db'
 
-import {
-  totalWasteEnergy,
-  totalWasteWater
-} from '../core'
-
-const sumWasteEnergy = totalWasteEnergy(ultimate1500.power, defaultEnergyTariff, defaultTimeWork, defaultAmountDays)
-const sumWasteWater = totalWasteWater(defaultUserOnDay, defaultAmountDays, defaultWaterTariff)
-
 export const defaultContext: IContext = {
   'energyTariff': defaultEnergyTariff,
   'waterTariff': defaultWaterTariff,
   'dayCost': defaultDayCost,
   'timeWork': defaultTimeWork,
-  'wasteEnergy': sumWasteEnergy,
-  'wasteWater': sumWasteWater,
+  'wasteEnergy': 0,
+  'wasteWater': 0,
   'userOnDay': defaultUserOnDay,
   'partBioGarbage': defaultPartBioGarbage,
   'amountDays': defaultAmountDays,

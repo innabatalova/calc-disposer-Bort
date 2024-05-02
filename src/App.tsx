@@ -24,7 +24,6 @@ import { paybackTime } from './core'
 const App = () => {
   const defoultContext = useContext(Context)
   const [context, setContext] = useState<IContext>(defoultContext)
-  console.log(context);
 
 
   const costTotal = (e: React.FormEvent<HTMLFormElement>) => {
@@ -44,8 +43,8 @@ const App = () => {
       'waterTariff': context.waterTariff,
       'dayCost': context.dayCost,
       'timeWork': context.timeWork,
-      'wasteEnergy': context.wasteEnergy,
-      'wasteWater': context.wasteWater,
+      'wasteEnergy': wasteEnergyResult,
+      'wasteWater': wasteWaterResult,
       'userOnDay': context.userOnDay,
       'partBioGarbage': context.partBioGarbage,
       'amountDays': context.amountDays,
@@ -57,6 +56,7 @@ const App = () => {
       'paybackResult': paybackResult
     }
     setContext(newContext)
+
   }
 
 
@@ -67,27 +67,37 @@ const App = () => {
           Калькулятор выгоды промышленных измельчителей Bort
         </Typography>
         <Typography variant="body1" sx={TypographyTextStyle}>
-          Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quos
-          blanditiis tenetur unde suscipit, quam beatae rerum inventore consectetur,
-          neque doloribus, cupiditate numquam dignissimos laborum fugiat deleniti? Eum
-          quasi quidem quibusdam. Lorem ipsum, dolor sit amet consectetur adipisicing elit.
-          Ipsa in cum aut laboriosam dicta at repellendus ea sequi officiis?
-          Consectetur ex maiores reiciendis rerum voluptatem quaerat facere itaque, unde ab.
+          Изменяемые поля:
+          <br />
+          <strong>Затраты на вывоз мусора</strong> - данные по умолчанию за вывоз мусорного бака объемом 8м3 за день, кол-во дней 30 (месяц в среднем)
+          <br />
+          <strong>Тарифы</strong> - данные по умолчанию средние значения по Москве
+          <br />
+          <strong>Работа ресторана</strong> - данные по умолчанию средние значения по Москве из интернета.
+          <br />
+          <strong>Выбор измельчителя</strong> - только 2 варианта, т.к. у нас 2 модели.
+        </Typography>
+        <Typography variant="body1" sx={TypographyTextStyle}>
+          Расчет данных:
+          <br />
+          <strong>Расход электроэнергии</strong> = ( (мощность измельчителя / 1000) * тариф э/э * время работы в сутки * дни в месяце )
+          <br />
+          <strong>Расход воды</strong> - точных данных нет, по данным статей про измельчители допрасход воды примерно 3 литра в сутки на человека
+          <br />
+          = ( (кол-во клиентов в день * кол-во дней * (3л / 1000 ) ) * тариф воды )
+          <br />
+          <strong>Общие затраты на вывоз мусора</strong> = ( кол-во дней * стоимость вывоза за день )
+          <br />
+          <strong>Выгода от использования</strong> = ( общие затраты на вывоз мусора - % био отходов )
+          <br />
+          <strong>Экономия за период</strong> = ( выгода от использования - (расход электроэнергии + расход воды) )
+          <br />
+          <strong>Окупаемость</strong> = ( цена измельчителя / (экономия за период / кол-во дней) )
         </Typography>
 
         <form className={styles.Wrapper} onSubmit={costTotal}>
 
           <div className={styles.Data}>
-            <Card sx={CardStyle}>
-              <Typography variant="h6">
-                Работа ресторана
-              </Typography>
-              <div className={styles.Items}>
-                <CustomTextField idProps='userOnDay' labelProps='Количество клиентов в день' helperProps='Среднее значение по Москве, чел' defaultValueProps={context.userOnDay} />
-                <CustomTextField idProps='partBioGarbage' labelProps='Доля биомусора' helperProps='Относительно общего кол-ва мусора, %' defaultValueProps={context.partBioGarbage} />
-              </div>
-            </Card>
-
             <Card sx={CardStyle}>
               <Typography variant="h6">
                 Затраты на вывоз мусора
@@ -108,12 +118,12 @@ const App = () => {
 
             <Card sx={CardStyle}>
               <Typography variant="h6">
-                Расход измельчителя
+                Работа ресторана
               </Typography>
               <div className={styles.Items}>
+                <CustomTextField idProps='userOnDay' labelProps='Количество клиентов в день' helperProps='Среднее значение по Москве, чел' defaultValueProps={context.userOnDay} />
+                <CustomTextField idProps='partBioGarbage' labelProps='Доля биомусора' helperProps='Относительно общего кол-ва мусора, %' defaultValueProps={context.partBioGarbage} />
                 <CustomTextField idProps='timeWork' labelProps='Время работы измельчителя' helperProps='В сутки, час' defaultValueProps={context.timeWork} />
-                <CustomTextField idProps='wasteEnergy' labelProps='Расход электроэнергии' helperProps='Дополнительный расход на оплату электроэнергии при работе измельчителя, руб' defaultValueProps={context.wasteEnergy} />
-                <CustomTextField idProps='wasteWater' labelProps='Расход воды' helperProps='Дополнительный расход на оплату воды при работе измельчителя, руб' defaultValueProps={context.wasteWater} />
               </div>
             </Card>
           </div>

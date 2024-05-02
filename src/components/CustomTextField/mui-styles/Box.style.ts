@@ -1,7 +1,7 @@
 export const BoxStyle = {
   width: '100%',
-  marginTop: 4,
-  marginBottom: 4,
+  marginTop: 2,
+  marginBottom: 2,
   '@media (max-width: 420px)': {
     width: '100%',
   }
