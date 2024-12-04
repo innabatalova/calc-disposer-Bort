@@ -1,9 +1,7 @@
 import { useState, useContext } from 'react'
 import { Card, Typography } from '@mui/material'
 
-import { IContext } from '../../context/IContext'
-
-import { CustomSelectField } from '../../components/CustomSelectField'
+import { CustomSelectField } from '../../components/CustomSelectField/CustomSelectField'
 
 import { ultimate1500, ultimate2000 } from '../../db'
 
@@ -32,12 +30,12 @@ export const CustomBlockSelect = () => {
       }
     }
     if (typeof e.target.value === 'number') {
-      if (e.target.value === 1125 || e.target.value === 144790) {
+      if (e.target.value === 1125 || e.target.value === 176990) {
         setValueDisposer(ultimate1500)
         context.modelPower = ultimate1500.power
         context.modelPrice = ultimate1500.price
       }
-      if (e.target.value === 1470 || e.target.value === 196990) {
+      if (e.target.value === 1470 || e.target.value === 243190) {
         setValueDisposer(ultimate2000)
         context.modelPower = ultimate2000.power
         context.modelPrice = ultimate2000.price

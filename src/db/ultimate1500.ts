@@ -33,5 +33,5 @@ export const ultimate1500: IUltimateDB = {
   control: 'Электронное',
   smoothStart: true,
   quantityService: '130-300',
-  price: 144790
+  price: 176990
 }

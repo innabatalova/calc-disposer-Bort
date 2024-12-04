@@ -16,7 +16,7 @@ export const CustomSelectField = ({ idProps, labelProps, valueDisposerProps, cha
       setMenuItemValue([ultimate1500.model, ultimate2000.model])
     } else if (valueDisposerProps === 1125 || valueDisposerProps === 1470) {
       setMenuItemValue([ultimate1500.power, ultimate2000.power])
-    } else if (valueDisposerProps === 144790 || valueDisposerProps === 196990) {
+    } else if (valueDisposerProps === 176990 || valueDisposerProps === 243190) {
       setMenuItemValue([ultimate1500.price, ultimate2000.price])
     } else {
       console.error('Error menuItem value props')

@@ -35,6 +35,11 @@ export const CustomBlockResult = () => {
           <CustomTextField idProps='recalResult' labelProps='Выгода от использования'
             helperProps='Выгода от использования, руб' variantProps='filled'
             disabledProps={true} valueProps={context.recalResult} />
+          <Typography>
+            За счет снижения общего количества биоразлагаемого мусора на {context.partBioGarbage}%,
+            общие затраты на вывоз мусора уменьшаются на {context.partBioGarbage}% за вычетом расхода 
+            на коммунальные услуги, необходимые для обеспечения работы измельчителя.
+          </Typography>
 
           <CustomTextField idProps='savingResult' labelProps='Экономия за указанный период'
             helperProps='Экономия за указанный период, руб' variantProps='filled'
